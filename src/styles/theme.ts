@@ -9,5 +9,6 @@ export const theme: DefaultTheme = {
     gray3: "#ccc",
     gray4: "#ddd",
     gray5: "#eee",
+    white: "#fff",
   },
 };
