@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import React from "react";
 import header from "@/images/header.jpg";
+import { NavBar } from "../NavBar";
 
 const Container = styled.div`
   height: 360px;
@@ -12,7 +13,9 @@ const Container = styled.div`
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
 `;
 
 const HeaderName = styled.h1`
@@ -45,5 +48,6 @@ export const Header = () => (
     <LinkHomeA href="/">
       <HeaderName>아서의 책방</HeaderName>
     </LinkHomeA>
+    <NavBar />
   </Container>
 );
