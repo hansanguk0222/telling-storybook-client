@@ -1,16 +1,23 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import React from "react";
 import header from "@/images/header.jpg";
 import { NavBar } from "../NavBar";
+import { useLocation } from "react-router";
 
-const Container = styled.div`
-  height: 360px;
-  @media only screen and (min-width: 768px) {
-    height: 480px;
-  }
+const Container = styled.div<{ pathname: string }>`
+  ${(props) =>
+    props.pathname === "/login"
+      ? css`
+          height: 200px;
+        `
+      : css`
+          height: 360px;
+          @media only screen and (min-width: 768px) {
+            height: 480px;
+          }
+        `}
   width: 100%;
   background-image: url(${header});
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -43,11 +50,22 @@ const LinkHomeA = styled.a`
   }
 `;
 
-export const Header = () => (
-  <Container>
-    <LinkHomeA href="/">
-      <HeaderName>아서의 책방</HeaderName>
-    </LinkHomeA>
-    <NavBar />
-  </Container>
-);
+const LinkLogin = styled.a`
+  text-decoration: none;
+  font-size: 20px;
+  width: 100%;
+`;
+
+export const Header = () => {
+  const location = useLocation();
+  console.log(location.pathname);
+  return (
+    <Container pathname={location.pathname}>
+      <LinkLogin href="/login">로그인 하기</LinkLogin>
+      <LinkHomeA href="/">
+        <HeaderName>아서의 책방</HeaderName>
+      </LinkHomeA>
+      <NavBar />
+    </Container>
+  );
+};
