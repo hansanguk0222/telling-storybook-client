@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { Header } from "@/components/Header";
 import { RecoilRoot } from "recoil";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import { Login } from "./components/Login";
 
 const App = () => {
   return (
@@ -10,6 +11,9 @@ const App = () => {
       <RecoilRoot>
         <div className="App">
           <Header />
+          <Switch>
+            <Route exact path="/login" component={Login} />
+          </Switch>
         </div>
       </RecoilRoot>
     </BrowserRouter>
