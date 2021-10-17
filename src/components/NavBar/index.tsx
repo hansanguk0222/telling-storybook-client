@@ -48,8 +48,12 @@ export const NavBar = () => {
         오디오북
       </StyledA>
       <StyledA
-        href="/novels"
-        isSelected={location && location.pathname === "/novels"}
+        href="/novel"
+        isSelected={
+          location &&
+          (location.pathname === "/novel" ||
+            location.pathname === "/novel/write")
+        }
       >
         소설
       </StyledA>

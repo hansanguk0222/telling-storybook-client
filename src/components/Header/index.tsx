@@ -6,7 +6,7 @@ import { useLocation } from "react-router";
 
 const Container = styled.div<{ pathname: string }>`
   ${(props) =>
-    props.pathname === "/login"
+    props.pathname === "/login" || props.pathname === "/novel/write"
       ? css`
           height: 200px;
         `
