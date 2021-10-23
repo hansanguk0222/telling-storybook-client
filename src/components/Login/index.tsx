@@ -38,9 +38,10 @@ export const Login = () => {
   }, [loginSelectorLodable]);
 
   const googleLoginSuccess = useCallback((response) => {
+    console.log(response);
     setUserEmailAndNickname({
       email: `${response.googleId}@google.com`,
-      nickname: response.it.Re,
+      nickname: response.googleId,
     });
   }, []);
 
