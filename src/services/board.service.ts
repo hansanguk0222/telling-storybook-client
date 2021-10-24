@@ -29,11 +29,18 @@ export const boardService = {
   },
   getBoardList: async ({ boardType }: { boardType: string }) => {
     const getData = await Axios.get(
-      `http://localhost:8000/boards/${boardType}`,
+      `http://localhost:8000/boards/boardtype/${boardType}`,
       {
         headers: { Authorization: `${localStorage.getItem("accessToken")}` },
       }
     );
+    return getData;
+  },
+  getBoardById: async ({ _id }: { _id: number }) => {
+    console.log(_id);
+    const getData = await Axios.get(`http://localhost:8000/boards/${_id}`, {
+      headers: { Authorization: `${localStorage.getItem("accessToken")}` },
+    });
     return getData;
   },
 };

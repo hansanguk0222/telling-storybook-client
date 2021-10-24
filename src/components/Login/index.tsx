@@ -9,6 +9,7 @@ import {
 } from "recoil";
 import { loginSelector, userEmailAndNicknameAtom } from "@/recoils/Auth";
 import { emptyValueChecker } from "@/utils";
+import { Redirect } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -44,6 +45,11 @@ export const Login = () => {
       nickname: response.googleId,
     });
   }, []);
+
+  if (localStorage.getItem("accessToken")) {
+    console.log(localStorage.getItem("accessToken"));
+    window.location.href = "/reports";
+  }
 
   const googleLoginFailure = useCallback(() => {
     alert("구글 로그인 도중 오류가 발생하였습니다.");

@@ -125,3 +125,24 @@ export const boradListSelector = selector({
     }
   },
 });
+
+export const boardIdAtom = atom<{ _id: number }>({
+  key: "boardId",
+  default: { _id: 0 },
+});
+
+export const boardIdSelector = selector({
+  key: "boardIdSelector",
+  get: async ({ get }) => {
+    const { _id } = get(boardIdAtom);
+    try {
+      if (!emptyValueChecker([_id]) && _id !== 0) {
+        const { data } = await boardService.getBoardById({ _id });
+        console.log(data);
+        return data;
+      }
+    } catch (err) {
+      return false;
+    }
+  },
+});

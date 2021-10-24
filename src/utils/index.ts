@@ -36,3 +36,19 @@ export const BOARD = {
 
 export const emptyValueChecker = (arr: any) =>
   arr.every((item) => item === "" || item === undefined || item === null);
+
+export const getBoardKeyType = (keyType: string) =>
+  keyType === "독후감" ? "reports" : "novels";
+
+export const prettyDate = (date: string) =>
+  date
+    .split(".")[0]
+    .split("T")
+    .map((item, idx) => {
+      if (idx === 1) {
+        const res = item.split(":");
+        return `${res[0]}시 ${res[1]}분 ${res[2]}초`;
+      }
+      return item;
+    })
+    .join(" ");

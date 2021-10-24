@@ -1,150 +1,107 @@
+import { boardIdAtom, boardIdSelector } from "@/recoils/Board";
+import { IBoard } from "@/types";
+import React, { useEffect, useState } from "react";
+import { useRecoilState, useRecoilValueLoadable } from "recoil";
+import { prettyDate } from "@/utils";
 import styled from "styled-components";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import { useEffect, useState } from "react";
-import { BOARD } from "@/utils";
-import { PaddingWrapper } from "@/components/Common/PaddingWrapper";
-import { calcRem } from "@/styles/theme";
-import { TwoWrapper } from "@/components/Common/TwoWrapper";
-import {
-  useRecoilState,
-  useRecoilValue,
-  useRecoilValueLoadable,
-  useSetRecoilState,
-} from "recoil";
-import { userInfoState } from "@/recoils/Auth";
-import {
-  createBoardAtom,
-  fontSizeLabelState,
-  fontSizeState,
-} from "@/recoils/Board";
 
-const Title = styled.input`
-  /* width: 685px; */
-  font-size: ${calcRem(20)};
-  padding: ${calcRem(5)};
-  border-top: none;
-  border-right: none;
-  border-left: none;
-  border-bottom: 1px solid "#FAFAFA";
-  background: none;
-  flex: 1;
-`;
-
-const Guideleft = styled.p`
-  width: ${calcRem(150)};
-  font-size: ${calcRem(20)};
-  font-weight: 500;
-  text-align: right;
-  margin-right: ${calcRem(15)};
-`;
-
-const GuideRight = styled.p`
-  font-size: ${calcRem(20)};
-  font-weight: 400;
-`;
-
-const ReactQuillWrapper = styled.div`
-  display: flex;
-  margin-bottom: 50px;
-`;
-
-const BottomButtonBox = styled.div`
+const Container = styled.div`
+  margin-top: 200px;
   width: 100%;
+  height: 100%;
+  padding: 20px 20%;
+  background: white;
+`;
+const BoardInfoBox = styled.div`
   display: flex;
-  justify-content: right;
-  padding-top: 30px;
+  width: 100%;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ccc;
 `;
 
-const CancelButton = styled.a`
-  padding: 10px 15px;
-  border: none;
-  background: #cb9ffd;
-  border-radius: 5px;
+const BoardInfo = styled.div`
+  width: 80%;
+  display: flex;
+  font-size: 20px;
+  padding: 5px 0px;
+`;
+
+const BoardInfoContent = styled.div`
+  padding-left: 15px;
+  background: white;
+  display: flex;
+  justify-content: center;
+`;
+
+const BoardInfoName = styled.div`
+  border-right: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  padding-left: 10px;
   margin-right: 10px;
-  text-decoration: none;
+  font-size: 20px;
+  padding-right: 10px;
 `;
 
-const SubmitButton = styled.button`
-  padding: 10px 15px;
-  border: none;
-  background: #a9e1ed;
-  border-radius: 5px;
+const BoardContentBox = styled.div`
+  overflow-y: scroll;
+  height: 600px;
+  background: white;
 `;
 
-export const Board: React.FC<{ boardType: string }> = ({ boardType }) => {
-  const [boardContent, setBoardContent] = useState("");
-  const [boardTitle, setBoardTitle] = useState("");
-  const [readingTime, setReadingTime] = useState("");
-  const [test, setTest] = useRecoilState(createBoardAtom);
-  const [fontSize, setFontSize] = useRecoilState(fontSizeState);
-  const fetchResult = useRecoilValueLoadable(fontSizeLabelState);
+export const Board: React.FC<{ _id: number }> = ({ _id }) => {
+  const [boardValue, setBoardValue] = useState<IBoard | null>(null);
+  const [boardId, setBoardId] = useRecoilState(boardIdAtom);
+  const fetchResult = useRecoilValueLoadable(boardIdSelector);
 
   useEffect(() => {
     console.log(fetchResult);
+    if (fetchResult.state === "hasValue" && fetchResult.contents) {
+      const { board } = fetchResult.contents as { board: IBoard };
+      setBoardValue(board);
+    }
   }, [fetchResult]);
 
-  const onSubmitBoard = () => {
-    setTest({
-      boardContent,
-      boardType,
-      boardTitle,
-      readingTime,
-    });
-  };
+  useEffect(() => {
+    setBoardId({ _id });
+  }, []);
 
-  //1. 토큰이랑 글쓰기 내용을 담아서 같이 넘긴다.
-  //2. 토큰이 삑나면 다시 리프레시 토큰을 이용하여 액세스 토큰을 받아온다.
-  //3. 받아온 엑세스 토큰으로 다시 글쓰기 내용에 요청한다.
   return (
     <>
-      <PaddingWrapper>
-        <button onClick={() => setFontSize(fontSize + 1)}>눌러봐</button>
-        <TwoWrapper>
-          <Guideleft>현재 날짜</Guideleft>
-          <GuideRight>{`${new Date().getFullYear()}-${(
-            "0" +
-            (new Date().getMonth() + 1)
-          ).slice(-2)}-${("0" + new Date().getDate()).slice(-2)}`}</GuideRight>
-        </TwoWrapper>
-        <TwoWrapper>
-          <Guideleft>게시판 종류</Guideleft>
-          <GuideRight>{boardType}</GuideRight>
-        </TwoWrapper>
-        <TwoWrapper>
-          <Guideleft>독서 시간</Guideleft>
-          <Title
-            value={readingTime}
-            onChange={(e) => setReadingTime(e.target.value)}
-            placeholder="제목을 입력해주세요"
+      {boardValue && (
+        <Container>
+          <BoardInfoBox>
+            <BoardInfo>
+              <BoardInfoName>날짜</BoardInfoName>
+              <BoardInfoContent>
+                {prettyDate(boardValue.createdAt)}
+              </BoardInfoContent>
+            </BoardInfo>
+            <BoardInfo>
+              <BoardInfoName>작성자 </BoardInfoName>
+              {boardValue.userId}
+            </BoardInfo>
+          </BoardInfoBox>
+          <BoardInfoBox>
+            <BoardInfo>
+              <BoardInfoName>조회수</BoardInfoName>
+              <BoardInfoContent> {boardValue.boardViews}</BoardInfoContent>
+            </BoardInfo>
+            <BoardInfo>
+              <BoardInfoName>보드 타입</BoardInfoName>
+              <BoardInfoContent> {boardValue.boardType}</BoardInfoContent>
+            </BoardInfo>
+          </BoardInfoBox>
+          <BoardInfoBox>
+            <BoardInfo>
+              <BoardInfoName>제목</BoardInfoName>
+              <BoardInfoContent> {boardValue.boardTitle}</BoardInfoContent>
+            </BoardInfo>
+          </BoardInfoBox>
+          <BoardContentBox
+            dangerouslySetInnerHTML={{ __html: boardValue.boardContent }}
           />
-        </TwoWrapper>
-        <TwoWrapper>
-          <Guideleft>제목</Guideleft>
-          <Title
-            value={boardTitle}
-            onChange={(e) => setBoardTitle(e.target.value)}
-            placeholder="제목을 입력해주세요"
-          />
-        </TwoWrapper>
-        <ReactQuillWrapper>
-          <Guideleft>내용</Guideleft>
-          <ReactQuill
-            style={{ width: "100%", height: "500px", flex: 1, margin: 0 }}
-            theme="snow"
-            modules={BOARD.modules}
-            formats={BOARD.formats}
-            value={boardContent}
-            onChange={(content, delta, source, editor) =>
-              setBoardContent(editor.getHTML())
-            }
-          />
-        </ReactQuillWrapper>
-        <BottomButtonBox>
-          <CancelButton>취소</CancelButton>
-          <SubmitButton onClick={onSubmitBoard}>제출</SubmitButton>
-        </BottomButtonBox>
-      </PaddingWrapper>
+        </Container>
+      )}
     </>
   );
 };

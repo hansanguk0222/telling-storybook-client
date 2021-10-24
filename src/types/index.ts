@@ -8,4 +8,5 @@ export interface IBoard {
   isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
+  userId: number;
 }
