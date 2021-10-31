@@ -12,6 +12,7 @@ import { Login } from "./components/Login";
 import { CreateBoardForm } from "./components/CreateBoardForm";
 import { Board } from "@/components/Board";
 import { BoardList } from "./components/BoardList";
+import { CommentList } from "./components/CommentList";
 
 const App = () => {
   return (

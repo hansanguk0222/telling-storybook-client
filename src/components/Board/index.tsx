@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValueLoadable } from "recoil";
 import { prettyDate } from "@/utils";
 import styled from "styled-components";
+import { CommentList } from "../CommentList";
 
 const Container = styled.div`
   margin-top: 200px;
@@ -100,6 +101,7 @@ export const Board: React.FC<{ _id: number }> = ({ _id }) => {
           <BoardContentBox
             dangerouslySetInnerHTML={{ __html: boardValue.boardContent }}
           />
+          <CommentList boardId={_id} />
         </Container>
       )}
     </>
