@@ -7,8 +7,11 @@ import { useLocation } from "react-router";
 const Container = styled.div<{ pathname: string }>`
   ${(props) =>
     props.pathname === "/login" ||
-    props.pathname === "/novel/write" ||
-    props.pathname.match(new RegExp(/^\/(reports)\/[0-9]+$/))
+    props.pathname === "/novels/write" ||
+    props.pathname === "/asmrs/write" ||
+    props.pathname.match(new RegExp(/^\/(reports)\/[0-9]+$/)) ||
+    props.pathname.match(new RegExp(/^\/(novels)\/[0-9]+$/)) ||
+    props.pathname.match(new RegExp(/^\/(asmrs)\/[0-9]+$/))
       ? css`
           height: 200px;
         `

@@ -29,3 +29,12 @@ export interface IReComment {
   commentId: number;
   boardId: number;
 }
+
+export interface IAsmr {
+  _id: number;
+  userId: number;
+  asmrFileName: string;
+  title: string;
+  asmrViews: number;
+  createdAt: string;
+}

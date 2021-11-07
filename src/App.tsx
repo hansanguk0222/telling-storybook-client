@@ -12,7 +12,9 @@ import { Login } from "./components/Login";
 import { CreateBoardForm } from "./components/CreateBoardForm";
 import { Board } from "@/components/Board";
 import { BoardList } from "./components/BoardList";
-import { CommentList } from "./components/CommentList";
+import { CreateASMR } from "./components/CreateASMR";
+import { AsmrList } from "./components/AsmrList";
+import { Asmr } from "./components/Asmr";
 
 const App = () => {
   return (
@@ -52,6 +54,21 @@ const App = () => {
                 path="/reports"
                 component={() => BoardList({ boardType: "독후감" })}
               />
+              <Route exact path="/asmrs/write" component={() => CreateASMR()} />
+              <Route
+                exact
+                path="/asmrs/:_id"
+                component={() =>
+                  Asmr({
+                    _id: Number(
+                      window.location.pathname.split("/")[
+                        window.location.pathname.split("/").length - 1
+                      ]
+                    ),
+                  })
+                }
+              />
+              <Route exact path="/asmrs" component={() => AsmrList()} />
             </Switch>
           </div>
         </Suspense>

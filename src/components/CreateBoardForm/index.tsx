@@ -79,7 +79,6 @@ export const CreateBoardForm: React.FC<{ boardType: string }> = ({
   const [boardTitle, setBoardTitle] = useState("");
   const [readingTime, setReadingTime] = useState("");
   const [test, setTest] = useRecoilState(createBoardAtom);
-  const [fontSize, setFontSize] = useRecoilState(fontSizeState);
   const fetchResult = useRecoilValueLoadable(fontSizeLabelState);
 
   useEffect(() => {
@@ -101,7 +100,6 @@ export const CreateBoardForm: React.FC<{ boardType: string }> = ({
   return (
     <>
       <PaddingWrapper>
-        <button onClick={() => setFontSize(fontSize + 1)}>눌러봐</button>
         <TwoWrapper>
           <Guideleft>현재 날짜</Guideleft>
           <GuideRight>{`${new Date().getFullYear()}-${(

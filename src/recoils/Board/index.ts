@@ -127,7 +127,7 @@ export const boradListSelector = selector({
 });
 
 export const boardIdAtom = atom<{ _id: number }>({
-  key: "boardId",
+  key: "boardIdAtom",
   default: { _id: 0 },
 });
 
@@ -138,7 +138,6 @@ export const boardIdSelector = selector({
     try {
       if (!emptyValueChecker([_id]) && _id !== 0) {
         const { data } = await boardService.getBoardById({ _id });
-        console.log(data);
         return data;
       }
     } catch (err) {
