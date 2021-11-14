@@ -15,7 +15,7 @@ import { BoardList } from "./components/BoardList";
 import { CreateASMR } from "./components/CreateASMR";
 import { AsmrList } from "./components/AsmrList";
 import { Asmr } from "./components/Asmr";
-
+import { Talk } from "./components/Talk";
 const App = () => {
   return (
     <BrowserRouter>
@@ -68,6 +68,7 @@ const App = () => {
                   })
                 }
               />
+              <Route exact path="/voicerooms" component={() => Talk()} />
               <Route exact path="/asmrs" component={() => AsmrList()} />
             </Switch>
           </div>
