@@ -10,9 +10,10 @@ import {
   boardListTypeAtom,
   boradListSelector,
 } from "@/recoils/Board";
-import { IBoard } from "@/types";
+import { IAsmr, IBoard } from "@/types";
 import { getBoardKeyType } from "@/utils";
 import { PaddingWrapper } from "../Common/PaddingWrapper";
+import { asmrListAtom, asmrListSelector } from "@/recoils/Asmr";
 
 const Container = styled.div`
   height: 100%;
@@ -89,65 +90,59 @@ const PageIdxButton = styled.div`
   }
 `;
 
-export const BoardList: React.FC<{ boardType: string }> = ({ boardType }) => {
-  const [boardListType, setBoardListType] = useRecoilState(boardListTypeAtom);
-  const [boardListState, setBoardListState] = useRecoilState(boardListAtom);
-  const [divideBoardList, setDivideBoardList] = useState<IBoard[][]>([]);
+export const AsmrList = () => {
+  const [asmrListState, setAsmrList] = useRecoilState(asmrListAtom);
+  const [divideAsmrListState, setDivideAsmrList] = useState<IAsmr[][]>([]);
   const [showIdx, setShowIdx] = useState<number>(1);
-  const fetchResult = useRecoilValueLoadable(boradListSelector);
+  const fetchResult = useRecoilValueLoadable(asmrListSelector);
 
   useEffect(() => {
+    console.log(fetchResult);
     if (fetchResult.state === "hasValue" && fetchResult.contents) {
-      const { boardList } = fetchResult.contents as { boardList: IBoard[] };
-      setBoardListState({ boardList });
+      const { asmrList } = fetchResult.contents as { asmrList: IAsmr[] };
+      setAsmrList({ asmrList });
     }
   }, [fetchResult]);
 
   useEffect(() => {
-    setBoardListType({ boardType });
-  }, []);
-
-  useEffect(() => {
-    if (boardListState.boardList.length !== 0) {
-      const { boardList } = boardListState;
-      if (boardList.length !== 0) {
-        const newDivideBoardList = [];
-        for (let i = 0; i < boardList.length; i += 20) {
-          newDivideBoardList.push(boardList.slice(i, i + 20));
+    if (asmrListState.asmrList.length !== 0) {
+      const { asmrList } = asmrListState;
+      if (asmrList.length !== 0) {
+        const newDivideAsmrList = [];
+        for (let i = 0; i < asmrList.length; i += 20) {
+          newDivideAsmrList.push(asmrList.slice(i, i + 20));
         }
-        setDivideBoardList(newDivideBoardList);
+        setDivideAsmrList(newDivideAsmrList);
       }
     }
-  }, [boardListState]);
+  }, [asmrListState]);
 
   const onClickPageButton = (idx: number) => setShowIdx(idx);
 
   return (
     <>
-      {divideBoardList.length !== 0 && (
+      {divideAsmrListState.length !== 0 && (
         <>
           <SeperateBox />
           <Container>
             <ThemeBox>
-              <IdBox>글 번호</IdBox>
-              <TitleBox>글 제목</TitleBox>
+              <IdBox>asmr 번호</IdBox>
+              <TitleBox>asmr 제목</TitleBox>
               <NicknameBox>작성자</NicknameBox>
               <DateBox>작성 날짜</DateBox>
               <ViewBox>조회수</ViewBox>
             </ThemeBox>
-            {divideBoardList[showIdx - 1].map((item, idx) => (
+            {divideAsmrListState[showIdx - 1].map((item, idx) => (
               <BoardListItem key={idx}>
                 <IdBox>{item._id}</IdBox>
-                <TitleBox href={`${getBoardKeyType(boardType)}/${item._id}`}>
-                  {item.boardTitle}
-                </TitleBox>
+                <TitleBox href={`asmrs/${item._id}`}>{item.title}</TitleBox>
                 <NicknameBox>{item.userId}</NicknameBox>
                 <DateBox>{item.createdAt}</DateBox>
-                <ViewBox>{item.boardViews}</ViewBox>
+                <ViewBox>{item.asmrViews}</ViewBox>
               </BoardListItem>
             ))}
             <PageIdxButtonBox>
-              {divideBoardList.map((item, idx) => (
+              {divideAsmrListState.map((item, idx) => (
                 <PageIdxButton onClick={() => onClickPageButton(idx + 1)}>
                   {idx + 1}
                 </PageIdxButton>

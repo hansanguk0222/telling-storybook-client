@@ -1,6 +1,15 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import GoogleLogin from "react-google-login";
+import {
+  useRecoilState,
+  useRecoilValue,
+  useRecoilValueLoadable,
+  useSetRecoilState,
+} from "recoil";
+import { loginSelector, userEmailAndNicknameAtom } from "@/recoils/Auth";
+import { emptyValueChecker } from "@/utils";
+import { Redirect } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -17,9 +26,30 @@ export const ButtonBox = styled.div`
 `;
 
 export const Login = () => {
+  const setUserEmailAndNickname = useSetRecoilState(userEmailAndNicknameAtom);
+  const loginSelectorLodable = useRecoilValueLoadable(loginSelector);
+
+  useEffect(() => {
+    if (
+      loginSelectorLodable.state === "hasValue" &&
+      loginSelectorLodable.contents !== undefined
+    ) {
+      window.location.href = "http://localhost:3000/";
+    }
+  }, [loginSelectorLodable]);
+
   const googleLoginSuccess = useCallback((response) => {
     console.log(response);
+    setUserEmailAndNickname({
+      email: `${response.googleId}@google.com`,
+      nickname: response.googleId,
+    });
   }, []);
+
+  if (localStorage.getItem("accessToken")) {
+    console.log(localStorage.getItem("accessToken"));
+    window.location.href = "/reports";
+  }
 
   const googleLoginFailure = useCallback(() => {
     alert("구글 로그인 도중 오류가 발생하였습니다.");
